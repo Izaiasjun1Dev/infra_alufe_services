@@ -1,0 +1,13 @@
+# Example configuration for dev environment
+# Copy this file to dev.tfvars and fill in your actual values
+
+aws_region   = "us-east-1"
+project_name = "alufe"
+environment  = "dev"
+
+# Twilio credentials (get from https://console.twilio.com)
+twilio_account_sid = "YOUR_TWILIO_ACCOUNT_SID"
+twilio_auth_token  = "YOUR_TWILIO_AUTH_TOKEN"
+
+# Build configuration
+build_image = true
