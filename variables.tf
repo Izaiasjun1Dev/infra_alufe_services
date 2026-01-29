@@ -5,7 +5,7 @@ variable "aws_region" {
 
 variable "project_name" {
   type    = string
-  default = "projeto-x"
+  default = "luv"
 }
 
 variable "environment" {
@@ -20,13 +20,15 @@ variable "build_image" {
 }
 
 variable "twilio_account_sid" {
-  type    = string
-  default = ""
+  type      = string
+  default   = ""
+  sensitive = true
 }
 
 variable "twilio_auth_token" {
-  type    = string
-  default = ""
+  type      = string
+  default   = ""
+  sensitive = true
 }
 
 variable "env_vars" {
@@ -34,3 +36,41 @@ variable "env_vars" {
   default     = {}
   description = "Additional environment variables to pass to the backend"
 }
+
+# Security Configuration
+variable "enable_vpc" {
+  type        = bool
+  default     = false
+  description = "Enable VPC for Lambda network isolation"
+}
+
+variable "enable_waf" {
+  type        = bool
+  default     = false
+  description = "Enable WAF protection for API Gateway"
+}
+
+variable "enable_secrets_manager" {
+  type        = bool
+  default     = false
+  description = "Enable Secrets Manager for storing credentials"
+}
+
+variable "enable_monitoring" {
+  type        = bool
+  default     = false
+  description = "Enable CloudTrail and CloudWatch monitoring"
+}
+
+variable "vpc_cidr" {
+  type        = string
+  default     = "10.0.0.0/16"
+  description = "CIDR block for VPC"
+}
+
+variable "allowed_origin" {
+  type        = string
+  default     = "*"
+  description = "Allowed origin for CORS (e.g., https://yourapp.com)"
+}
+

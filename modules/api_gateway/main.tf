@@ -1,6 +1,6 @@
 resource "aws_api_gateway_rest_api" "api" {
   name        = "${var.project_name}-${var.environment}-api"
-  description = "API for Projeto X"
+  description = "API for Luv"
 }
 
 resource "aws_api_gateway_resource" "proxy" {

@@ -11,6 +11,7 @@ locals {
   # Dynamic environment variables merging infrastructure outputs and user vars
   infra_env_vars = {
     ENVIRONMENT          = var.environment
+    STAGE                = var.environment
     COGNITO_USER_POOL_ID = module.cognito.user_pool_id
     COGNITO_CLIENT_ID    = module.cognito.client_id
     PROFESSIONALS_TABLE  = module.dynamo.table_name
@@ -22,10 +23,25 @@ locals {
     SERVICES_TABLE       = module.dynamo.services_table
     MEDIA_BUCKET         = module.storage.bucket_name
     WEBSOCKET_URL        = module.websocket.websocket_url
-    TWILIO_ACCOUNT_SID   = var.twilio_account_sid
-    TWILIO_AUTH_TOKEN    = var.twilio_auth_token
     FORCE_REDEPLOY       = var.build_image ? local.image_tag : "static"
   }
 
-  final_env_vars = merge(local.infra_env_vars, var.env_vars)
+  # Twilio credentials - use direct env vars if Secrets Manager is disabled
+  twilio_env_vars = var.enable_secrets_manager ? {} : {
+    TWILIO_ACCOUNT_SID = var.twilio_account_sid
+    TWILIO_AUTH_TOKEN  = var.twilio_auth_token
+  }
+
+  # Secrets Manager configuration - tells the Python app where to find secrets
+  secrets_env_vars = var.enable_secrets_manager && length(module.secrets) > 0 ? {
+    SECRETS_MANAGER_SECRET_ID = module.secrets[0].twilio_secret_name
+  } : {}
+
+  final_env_vars = merge(
+    local.infra_env_vars,
+    local.twilio_env_vars,
+    local.secrets_env_vars,
+    var.env_vars
+  )
 }
+
