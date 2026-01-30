@@ -13,3 +13,9 @@ variable "lambda_invoke_arn" {
 variable "lambda_function_name" {
   type = string
 }
+
+variable "allowed_origin" {
+  type        = string
+  default     = "*"
+  description = "Allowed origin for CORS"
+}

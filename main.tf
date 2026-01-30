@@ -100,6 +100,7 @@ module "api_gateway" {
   environment          = var.environment
   lambda_invoke_arn    = module.lambda.invoke_arn
   lambda_function_name = module.lambda.function_name
+  allowed_origin       = var.allowed_origin
 }
 
 module "websocket" {

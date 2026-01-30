@@ -67,7 +67,7 @@ resource "aws_api_gateway_integration_response" "proxy_options_integration_respo
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'${var.allowed_origin}'"
   }
 
   depends_on = [aws_api_gateway_integration.proxy_options_integration]
@@ -132,7 +132,7 @@ resource "aws_api_gateway_integration_response" "root_options_integration_respon
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'${var.allowed_origin}'"
   }
 
   depends_on = [aws_api_gateway_integration.root_options_integration]
@@ -145,6 +145,21 @@ resource "aws_api_gateway_deployment" "deployment" {
     aws_api_gateway_integration.proxy_options_integration,
     aws_api_gateway_integration.root_options_integration
   ]
+
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.proxy.id,
+      aws_api_gateway_method.proxy_method.id,
+      aws_api_gateway_integration.lambda_integration.id,
+      aws_api_gateway_method.proxy_options.id,
+      aws_api_gateway_integration.proxy_options_integration.id,
+      var.allowed_origin
+    ]))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   rest_api_id = aws_api_gateway_rest_api.api.id
 }

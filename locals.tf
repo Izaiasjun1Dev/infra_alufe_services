@@ -24,6 +24,7 @@ locals {
     MEDIA_BUCKET         = module.storage.bucket_name
     WEBSOCKET_URL        = module.websocket.websocket_url
     FORCE_REDEPLOY       = var.build_image ? local.image_tag : "static"
+    CORS_ORIGINS         = var.allowed_origin
   }
 
   # Twilio credentials - use direct env vars if Secrets Manager is disabled
