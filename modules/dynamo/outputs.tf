@@ -26,6 +26,14 @@ output "services_table" {
   value = aws_dynamodb_table.services.name
 }
 
+output "platform_config_table" {
+  value = aws_dynamodb_table.platform_config.name
+}
+
+output "documents_table" {
+  value = aws_dynamodb_table.documents.name
+}
+
 # All table ARNs for Lambda IAM policies
 output "table_arns" {
   description = "List of all DynamoDB table ARNs"
@@ -36,7 +44,9 @@ output "table_arns" {
     aws_dynamodb_table.connections.arn,
     aws_dynamodb_table.messages.arn,
     aws_dynamodb_table.agents.arn,
-    aws_dynamodb_table.services.arn
+    aws_dynamodb_table.services.arn,
+    aws_dynamodb_table.platform_config.arn,
+    aws_dynamodb_table.documents.arn
   ]
 }
 

@@ -145,3 +145,25 @@ module "monitoring" {
   depends_on = [module.storage]
 }
 
+# =============================================================================
+# FRONTEND LAYER: AWS Amplify
+# =============================================================================
+module "amplify" {
+  count = var.enable_amplify ? 1 : 0
+
+  source         = "./modules/amplify"
+  project_name   = var.project_name
+  environment    = var.environment
+  github_token   = var.github_token
+  repository_url = var.front_repository_url
+
+  env_vars = {
+    VITE_API_URL              = module.api_gateway.base_url
+    VITE_WEBSOCKET_URL        = module.websocket.websocket_url
+    VITE_COGNITO_USER_POOL_ID = module.cognito.user_pool_id
+    VITE_COGNITO_CLIENT_ID    = module.cognito.client_id
+    VITE_AWS_REGION           = var.aws_region
+    VITE_AWS_REGION           = var.aws_region
+  }
+}
+

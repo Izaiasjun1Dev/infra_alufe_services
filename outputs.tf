@@ -17,3 +17,8 @@ output "cognito_client_id" {
   value       = module.cognito.client_id
   description = "AWS Cognito Client ID"
 }
+
+output "amplify_url" {
+  value       = var.enable_amplify ? "https://main.${module.amplify[0].default_domain}" : null
+  description = "Default URL for the Amplify frontend"
+}

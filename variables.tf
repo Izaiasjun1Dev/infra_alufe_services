@@ -74,3 +74,34 @@ variable "allowed_origin" {
   description = "Allowed origin for CORS (e.g., https://yourapp.com)"
 }
 
+variable "github_token" {
+  type        = string
+  default     = ""
+  sensitive   = true
+  description = "GitHub Personal Access Token for Amplify"
+}
+
+variable "front_repository_url" {
+  type        = string
+  default     = "https://github.com/Izaiasjun1Dev/front_sua_assistente"
+  description = "GitHub repository URL for the frontend"
+}
+
+variable "domain_name" {
+  type        = string
+  default     = "luv.com.br"
+  description = "Base domain name for the application"
+}
+
+variable "enable_amplify" {
+  type        = bool
+  default     = false
+  description = "Enable AWS Amplify for frontend hosting"
+}
+
+variable "create_route53_zone" {
+  type        = bool
+  default     = false
+  description = "Create a new Route53 Hosted Zone"
+}
+

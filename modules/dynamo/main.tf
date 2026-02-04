@@ -188,3 +188,41 @@ resource "aws_dynamodb_table" "services" {
     Environment = var.environment
   }
 }
+
+resource "aws_dynamodb_table" "platform_config" {
+  name         = "${var.project_name}-${var.environment}-platform-config"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "config_id"
+
+  attribute {
+    name = "config_id"
+    type = "S"
+  }
+
+  tags = {
+    Name        = "${var.project_name}-platform-config"
+    Environment = var.environment
+  }
+}
+
+resource "aws_dynamodb_table" "documents" {
+  name         = "${var.project_name}-${var.environment}-documents"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "professional_id"
+  range_key    = "document_id"
+
+  attribute {
+    name = "professional_id"
+    type = "S"
+  }
+
+  attribute {
+    name = "document_id"
+    type = "S"
+  }
+
+  tags = {
+    Name        = "${var.project_name}-documents"
+    Environment = var.environment
+  }
+}
