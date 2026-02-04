@@ -1,12 +1,14 @@
 locals {
-  # Calculate a unique tag based on source code and config only (avoid volatile files)
-  image_tag = substr(sha1(join("", [
+  # Use the provided image_tag if available (from CI/CD), otherwise calculate it
+  calculated_tag = substr(sha1(join("", [
     for f in sort(setunion(
       fileset("../back", "src/**"),
       fileset("../back", "pyproject.toml"),
       fileset("../back", "Dockerfile")
     )) : filesha1("../back/${f}")
   ])), 0, 8)
+
+  image_tag = var.image_tag != "" ? var.image_tag : local.calculated_tag
 
   # Dynamic environment variables merging infrastructure outputs and user vars
   infra_env_vars = {
@@ -24,7 +26,7 @@ locals {
     PLATFORM_CONFIG_TABLE = module.dynamo.platform_config_table
     MEDIA_BUCKET          = module.storage.bucket_name
     WEBSOCKET_URL         = module.websocket.websocket_url
-    FORCE_REDEPLOY        = var.build_image ? local.image_tag : "static"
+    FORCE_REDEPLOY        = local.image_tag
     CORS_ORIGINS          = var.allowed_origin
   }
 

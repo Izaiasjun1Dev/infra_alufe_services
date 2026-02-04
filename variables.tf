@@ -19,6 +19,12 @@ variable "build_image" {
   description = "Whether to build and push the docker image"
 }
 
+variable "image_tag" {
+  type        = string
+  default     = ""
+  description = "Override the default image tag (calculated from hash) with a specific version (e.g., from CI/CD)"
+}
+
 variable "twilio_account_sid" {
   type      = string
   default   = ""
