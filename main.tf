@@ -156,13 +156,13 @@ module "amplify" {
   environment    = var.environment
   github_token   = var.github_token
   repository_url = var.front_repository_url
+  branch_name    = var.amplify_branch_name
 
   env_vars = {
     VITE_API_URL              = module.api_gateway.base_url
     VITE_WEBSOCKET_URL        = module.websocket.websocket_url
     VITE_COGNITO_USER_POOL_ID = module.cognito.user_pool_id
     VITE_COGNITO_CLIENT_ID    = module.cognito.client_id
-    VITE_AWS_REGION           = var.aws_region
     VITE_AWS_REGION           = var.aws_region
   }
 }

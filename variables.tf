@@ -105,6 +105,12 @@ variable "enable_amplify" {
   description = "Enable AWS Amplify for frontend hosting"
 }
 
+variable "amplify_branch_name" {
+  type        = string
+  default     = "main"
+  description = "Git branch name for Amplify deployments"
+}
+
 variable "create_route53_zone" {
   type        = bool
   default     = false
