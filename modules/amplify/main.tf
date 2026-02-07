@@ -3,6 +3,9 @@ resource "aws_amplify_app" "this" {
   repository   = var.repository_url
   access_token = var.github_token
 
+  # Enable auto-build when connected to repository
+  enable_branch_auto_build = true
+
   build_spec = <<-EOT
     version: 1
     frontend:
@@ -35,7 +38,8 @@ resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.this.id
   branch_name = var.branch_name
 
-  framework = "React"
-  stage     = var.environment == "prod" ? "PRODUCTION" : "DEVELOPMENT"
+  framework         = "React"
+  stage             = var.environment == "prod" ? "PRODUCTION" : "DEVELOPMENT"
+  enable_auto_build = true
 }
 
