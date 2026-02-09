@@ -23,6 +23,7 @@ locals {
     MESSAGES_TABLE        = module.dynamo.messages_table
     AGENTS_TABLE          = module.dynamo.agents_table
     SERVICES_TABLE        = module.dynamo.services_table
+    DOCUMENTS_TABLE       = module.dynamo.documents_table
     PLATFORM_CONFIG_TABLE = module.dynamo.platform_config_table
     MEDIA_BUCKET          = module.storage.bucket_name
     WEBSOCKET_URL         = module.websocket.websocket_url
