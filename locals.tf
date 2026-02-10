@@ -14,6 +14,7 @@ locals {
   infra_env_vars = {
     ENVIRONMENT           = var.environment
     STAGE                 = var.environment
+    AWS_REGION            = var.aws_region
     COGNITO_USER_POOL_ID  = module.cognito.user_pool_id
     COGNITO_CLIENT_ID     = module.cognito.client_id
     PROFESSIONALS_TABLE   = module.dynamo.table_name
