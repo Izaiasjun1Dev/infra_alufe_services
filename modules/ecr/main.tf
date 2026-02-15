@@ -20,7 +20,7 @@ resource "null_resource" "docker_build" {
   provisioner "local-exec" {
     command = <<EOF
       aws ecr get-login-password --region ${var.aws_region} | docker login --username AWS --password-stdin ${split("/", aws_ecr_repository.repo.repository_url)[0]}
-      docker build -t ${aws_ecr_repository.repo.repository_url}:${var.image_tag} ../back
+      docker build --platform linux/amd64 -t ${aws_ecr_repository.repo.repository_url}:${var.image_tag} ../back
       docker push ${aws_ecr_repository.repo.repository_url}:${var.image_tag}
     EOF
   }
