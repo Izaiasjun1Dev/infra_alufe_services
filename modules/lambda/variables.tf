@@ -58,3 +58,15 @@ variable "enable_secrets_access" {
   type        = bool
   default     = false
 }
+
+variable "sns_topic_arns" {
+  description = "List of SNS topic ARNs to allow publishing to"
+  type        = list(string)
+  default     = []
+}
+
+variable "notifications_table_arn" {
+  description = "ARN of the notifications DynamoDB table"
+  type        = string
+  default     = ""
+}
