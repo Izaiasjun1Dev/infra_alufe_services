@@ -26,8 +26,8 @@ resource "aws_amplify_app" "this" {
   EOT
 
   custom_rule {
-    source = "/<*>"
-    status = "404-200"
+    source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp)$)([^.]+$)/>"
+    status = "200"
     target = "/index.html"
   }
 
