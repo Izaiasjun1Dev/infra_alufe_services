@@ -33,7 +33,7 @@ resource "aws_lambda_function" "function" {
   package_type  = "Image"
   image_uri     = var.image_uri
   timeout       = 30
-  memory_size   = 512
+  memory_size   = 1024
 
   # VPC Configuration (conditional)
   dynamic "vpc_config" {
