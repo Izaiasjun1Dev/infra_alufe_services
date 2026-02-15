@@ -209,3 +209,59 @@ resource "aws_iam_role_policy_attachment" "lambda_apigateway" {
   role       = aws_iam_role.lambda_role.name
 }
 
+# SNS Publish Policy
+resource "aws_iam_policy" "sns_publish" {
+  count       = length(var.sns_topic_arns) > 0 ? 1 : 0
+  name        = "${var.project_name}-${var.environment}-sns-policy"
+  description = "Allow Lambda to publish to SNS topics"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["sns:Publish"]
+        Resource = var.sns_topic_arns
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_sns" {
+  count      = length(var.sns_topic_arns) > 0 ? 1 : 0
+  policy_arn = aws_iam_policy.sns_publish[0].arn
+  role       = aws_iam_role.lambda_role.name
+}
+
+# Notifications Table Policy (if separate from main table list)
+resource "aws_iam_policy" "notifications_table" {
+  count       = var.notifications_table_arn != "" ? 1 : 0
+  name        = "${var.project_name}-${var.environment}-notifications-policy"
+  description = "Access to notifications table"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:Query",
+          "dynamodb:Scan"
+        ]
+        Resource = [
+          var.notifications_table_arn,
+          "${var.notifications_table_arn}/index/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_notifications" {
+  count      = var.notifications_table_arn != "" ? 1 : 0
+  policy_arn = aws_iam_policy.notifications_table[0].arn
+  role       = aws_iam_role.lambda_role.name
+}

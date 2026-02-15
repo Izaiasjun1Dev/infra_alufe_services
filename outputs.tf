@@ -22,3 +22,11 @@ output "amplify_url" {
   value       = var.enable_amplify ? "https://main.${module.amplify[0].default_domain}" : null
   description = "Default URL for the Amplify frontend"
 }
+
+output "sns_topic_arn" {
+  value = module.notifications.sns_topic_arn
+}
+
+output "notifications_table" {
+  value = module.notifications.notifications_table_name
+}

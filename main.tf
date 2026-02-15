@@ -72,6 +72,42 @@ module "ecr" {
   aws_region   = var.aws_region
 }
 
+module "notifications" {
+  source       = "./modules/notifications"
+  project_name = var.project_name
+  environment  = var.environment
+  aws_region   = var.aws_region
+}
+
+# Notification Trigger & SQS Permission (Bridge between modules)
+resource "aws_lambda_event_source_mapping" "notification_sqs_trigger" {
+  event_source_arn = module.notifications.sqs_queue_arn
+  function_name    = module.lambda.function_arn
+  batch_size       = 10
+}
+
+resource "aws_iam_role_policy" "lambda_sqs_access" {
+  name = "${var.project_name}-${var.environment}-lambda-sqs-policy"
+  role = module.lambda.role_name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes"
+        ]
+        Resource = [
+          module.notifications.sqs_queue_arn
+        ]
+      }
+    ]
+  })
+}
+
 module "lambda" {
   source       = "./modules/lambda"
   project_name = var.project_name
@@ -83,11 +119,13 @@ module "lambda" {
   lambda_security_group_id = var.enable_vpc ? module.vpc[0].lambda_security_group_id : ""
 
   # Least-privilege IAM
-  dynamodb_table_arns   = module.dynamo.table_arns
-  media_bucket_arn      = module.storage.bucket_arn
-  enable_s3_access      = true
-  secrets_arn           = var.enable_secrets_manager && length(module.secrets) > 0 ? module.secrets[0].twilio_secret_arn : ""
-  enable_secrets_access = var.enable_secrets_manager
+  dynamodb_table_arns     = module.dynamo.table_arns
+  media_bucket_arn        = module.storage.bucket_arn
+  enable_s3_access        = true
+  secrets_arn             = var.enable_secrets_manager && length(module.secrets) > 0 ? module.secrets[0].twilio_secret_arn : ""
+  enable_secrets_access   = var.enable_secrets_manager
+  sns_topic_arns          = [module.notifications.sns_topic_arn]
+  notifications_table_arn = "arn:aws:dynamodb:${var.aws_region}:${data.aws_caller_identity.current.account_id}:table/${module.notifications.notifications_table_name}"
 
   environment_variables = local.final_env_vars
 

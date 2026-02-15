@@ -15,21 +15,23 @@ locals {
     ENVIRONMENT = var.environment
     STAGE       = var.environment
 
-    COGNITO_USER_POOL_ID  = module.cognito.user_pool_id
-    COGNITO_CLIENT_ID     = module.cognito.client_id
-    PROFESSIONALS_TABLE   = module.dynamo.table_name
-    APPOINTMENTS_TABLE    = module.dynamo.appointments_table_name
-    TWILIO_NUMBERS_TABLE  = module.dynamo.twilio_numbers_table_name
-    CONNECTIONS_TABLE     = module.dynamo.connections_table_name
-    MESSAGES_TABLE        = module.dynamo.messages_table
-    AGENTS_TABLE          = module.dynamo.agents_table
-    SERVICES_TABLE        = module.dynamo.services_table
-    DOCUMENTS_TABLE       = module.dynamo.documents_table
-    PLATFORM_CONFIG_TABLE = module.dynamo.platform_config_table
-    MEDIA_BUCKET          = module.storage.bucket_name
-    WEBSOCKET_URL         = module.websocket.websocket_url
-    FORCE_REDEPLOY        = local.image_tag
-    CORS_ORIGINS          = var.allowed_origin
+    COGNITO_USER_POOL_ID      = module.cognito.user_pool_id
+    COGNITO_CLIENT_ID         = module.cognito.client_id
+    PROFESSIONALS_TABLE       = module.dynamo.table_name
+    APPOINTMENTS_TABLE        = module.dynamo.appointments_table_name
+    TWILIO_NUMBERS_TABLE      = module.dynamo.twilio_numbers_table_name
+    CONNECTIONS_TABLE         = module.dynamo.connections_table_name
+    MESSAGES_TABLE            = module.dynamo.messages_table
+    AGENTS_TABLE              = module.dynamo.agents_table
+    SERVICES_TABLE            = module.dynamo.services_table
+    DOCUMENTS_TABLE           = module.dynamo.documents_table
+    PLATFORM_CONFIG_TABLE     = module.dynamo.platform_config_table
+    MEDIA_BUCKET              = module.storage.bucket_name
+    WEBSOCKET_URL             = module.websocket.websocket_url
+    NOTIFICATIONS_TABLE       = module.notifications.notifications_table_name
+    PLATFORM_EVENTS_TOPIC_ARN = module.notifications.sns_topic_arn
+    FORCE_REDEPLOY            = local.image_tag
+    CORS_ORIGINS              = var.allowed_origin
   }
 
   # Twilio credentials - use direct env vars if Secrets Manager is disabled
