@@ -12,3 +12,8 @@ output "stage_arn" {
   value       = aws_api_gateway_stage.stage.arn
 }
 
+
+output "rest_api_id" {
+  description = "ID of the REST API (does not depend on stage or Lambda)"
+  value       = aws_api_gateway_rest_api.api.id
+}
