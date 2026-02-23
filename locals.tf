@@ -32,6 +32,7 @@ locals {
     PLATFORM_EVENTS_TOPIC_ARN = module.notifications.sns_topic_arn
     FORCE_REDEPLOY            = local.image_tag
     CORS_ORIGINS              = var.allowed_origin
+    API_BASE_URL              = module.api_gateway.base_url
   }
 
   # Twilio credentials - use direct env vars if Secrets Manager is disabled
